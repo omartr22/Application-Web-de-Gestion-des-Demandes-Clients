@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  # Application PHP + Apache
+  app:
+    build: .
+    container_name: gestion-demandes-app
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html
+    depends_on:
+      - db
+    networks:
+      - app-network
+    environment:
+      - DB_HOST=db
+      - DB_NAME=gestion_demandes
+      - DB_USER=gestion_user
+      - DB_PASS=MotDePasse123!
+    restart: unless-stopped
+
+  # Base de données MySQL
+  db:
+    image: mysql:8.0
+    container_name: gestion-demandes-db
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: gestion_demandes
+      MYSQL_USER: gestion_user
+      MYSQL_PASSWORD: MotDePasse123!
+    volumes:
+      - db-data:/var/lib/mysql
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  # phpMyAdmin (optionnel)
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: gestion-demandes-phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: gestion_user
+      PMA_PASSWORD: MotDePasse123!
+    depends_on:
+      - db
+    networks:
+      - app-network
+    restart: unless-stopped
+
+volumes:
+  db-data:
+
+networks:
+  app-network:
+    driver: bridge

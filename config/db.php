@@ -1,12 +1,11 @@
 <?php
-// Informations de connexion à la base de données
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'gestion_demandes');
-define('DB_USER', 'root');
-define('DB_PASS', '');  // Pas de mot de passe par défaut sur XAMPP
+// Configuration dynamique (fonctionne avec Docker et en local)
+define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
+define('DB_NAME', getenv('DB_NAME') ?: 'gestion_demandes');
+define('DB_USER', getenv('DB_USER') ?: 'gestion_user');
+define('DB_PASS', getenv('DB_PASS') ?: 'MotDePasse123!');
 
 try {
-    // Création de la connexion PDO
     $pdo = new PDO(
         "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4",
         DB_USER,

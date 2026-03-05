@@ -13,7 +13,7 @@ permissions:
   pull-requests: write
 
 env:
-  DOCKER_IMAGE: votre-username/gestion-demandes
+  DOCKER_IMAGE: omartrab/gestion-demandes
   DOCKER_TAG: ${{ github.sha }}
 
 jobs:

@@ -1,0 +1,31 @@
+services:
+  app:
+    build: .
+    container_name: test-app
+    ports:
+      - "8080:80"
+    environment:
+      - DB_HOST=db
+      - DB_NAME=gestion_demandes
+      - DB_USER=gestion_user
+      - DB_PASS=MotDePasse123!
+    depends_on:
+      - db
+    networks:
+      - test-network
+
+  db:
+    image: mysql:8.0
+    container_name: test-db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: gestion_demandes
+      MYSQL_USER: gestion_user
+      MYSQL_PASSWORD: MotDePasse123!
+    networks:
+      - test-network
+
+networks:
+  test-network:
+    driver: bridge
+```
